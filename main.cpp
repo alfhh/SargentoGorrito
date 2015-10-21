@@ -12,6 +12,8 @@
  * using the + and - keys.
  */
 
+// Frank
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
