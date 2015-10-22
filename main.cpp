@@ -1,179 +1,136 @@
-/*
- * GLUT Shapes Demo
- *
- * Written by Nigel Stewart November 2003
- *
- * This program is test harness for the sphere, cone
- * and torus shapes in GLUT.
- *
- * Spinning wireframe and smooth shaded shapes are
- * displayed until the ESC or q key is pressed.  The
- * number of geometry stacks and slices can be adjusted
- * using the + and - keys.
+/**
+ * Sargento Gorrito
+ * Main class
+ * Developed: Alfredo Hinojosa - Francisco Canseco
  */
-
-// Frank
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
+#include <windows.h>
 #include <GL/glut.h>
 #endif
 
 #include <stdlib.h>
 
-static int slices = 16;
-static int stacks = 16;
+static int shoulder = 0, elbow = 0, hand = 0, finger = 0;
 
-/* GLUT callback Handlers */
-
-static void resize(int width, int height)
+void init(void)
 {
-    const float ar = (float) width / (float) height;
-
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;
+    glClearColor (1, 1, 1, 0.0);
+    glShadeModel (GL_FLAT);
 }
 
-static void display(void)
+void display(void)
 {
-    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-    const double a = t*90.0;
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor3d(1,0,0);
+    glClear (GL_COLOR_BUFFER_BIT);
+    glLineWidth(3); //***
+    glPushMatrix();
+    glTranslatef (-1.0, 0.0, 0.0);
+    glRotatef ((GLfloat) shoulder, 0.0, 0.0, 1.0);
+    glTranslatef (1.0, 0.0, 0.0);
 
     glPushMatrix();
-        glTranslated(-2.4,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidSphere(1,slices,stacks);
+    glScalef (2.0, 0.4, 1.0);
+    glColor3f(1, 0, 0);//***
+    glutSolidCube(1.0);//***
+    glColor3f(0, 0, 0);//***
+    glutWireCube (1.0); // <- shoulder
     glPopMatrix();
 
+    glTranslatef (1.0, 0.0, 0.0);
+    glRotatef ((GLfloat) elbow, 0.0, 0.0, 1.0);
+    glTranslatef (1.0, 0.0, 0.0);
     glPushMatrix();
-        glTranslated(0,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidCone(1,1,slices,stacks);
+    glScalef (2.0, 0.4, 1.0);
+    glColor3f(0, 0, 1); //***
+    glutWireCube (1.0); // <- elbow
     glPopMatrix();
 
+    glTranslatef(1.0, 0.0, 0.0);
+    glRotatef ((GLfloat) hand, 0.0, 0.0, 1.0);
+    glTranslatef(0.5, 0.0, 0.0);
     glPushMatrix();
-        glTranslated(2.4,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidTorus(0.2,0.8,slices,stacks);
+    glScalef(1.0, 0.4, 1.0);
+    glColor3f(0, 1, 0);
+    glutWireCube(1.0); // <- hand
     glPopMatrix();
 
+    glTranslatef(.5, 0.0, 0.0);
+    glRotatef ((GLfloat) finger, 0.0, 0.0, 1.0);
+    glTranslatef(0.25, 0.0, 0.0);
     glPushMatrix();
-        glTranslated(-2.4,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireSphere(1,slices,stacks);
+    glScalef(0.5, 0.4, 1.0);
+    glColor3f(0, 1, .5);
+    glutWireCube(1.0); // <- finger
     glPopMatrix();
 
-    glPushMatrix();
-        glTranslated(0,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireCone(1,1,slices,stacks);
     glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(2.4,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireTorus(0.2,0.8,slices,stacks);
-    glPopMatrix();
-
     glutSwapBuffers();
 }
 
-
-static void key(unsigned char key, int x, int y)
+void reshape (int w, int h)
 {
-    switch (key)
-    {
-        case 27 :
-        case 'q':
-            exit(0);
-            break;
+    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    gluPerspective(65.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0); // dibujo de perspectiva
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0); // tenemos camara
+}
 
-        case '+':
-            slices++;
-            stacks++;
+void keyboard (unsigned char key, int x, int y)
+{
+    switch (key) {
+        case 's':   /*  s key rotates at shoulder  */
+            shoulder = (shoulder + 5) % 360;
+            glutPostRedisplay();
             break;
-
-        case '-':
-            if (slices>3 && stacks>3)
-            {
-                slices--;
-                stacks--;
-            }
+        case 'S':
+            shoulder = (shoulder - 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'e':  /*  e key rotates at elbow  */
+            elbow = (elbow + 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'E':
+            elbow = (elbow - 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'h':  /*  e key rotates at hand  */
+            hand = (hand + 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'H':
+            hand = (hand - 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'f':  /*  e key rotates at hand  */
+            finger = (finger + 5) % 360;
+            glutPostRedisplay();
+            break;
+        case 'F':
+            finger = (finger - 5) % 360;
+            glutPostRedisplay();
+            break;
+        default:
             break;
     }
-
-    glutPostRedisplay();
 }
 
-static void idle(void)
-{
-    glutPostRedisplay();
-}
-
-const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
-const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
-
-const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat high_shininess[] = { 100.0f };
-
-/* Program entry point */
-
-int main(int argc, char *argv[])
+int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitWindowSize(640,480);
-    glutInitWindowPosition(10,10);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-
-    glutCreateWindow("GLUT Shapes");
-
-    glutReshapeFunc(resize);
+    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize (500, 500);
+    glutInitWindowPosition (100, 100);
+    glutCreateWindow ("Sargento Gorrito");
+    init ();
     glutDisplayFunc(display);
-    glutKeyboardFunc(key);
-    glutIdleFunc(idle);
-
-    glClearColor(1,1,1,1);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
     glutMainLoop();
-
-    return EXIT_SUCCESS;
+    return 0;
 }
