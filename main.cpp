@@ -29,6 +29,9 @@ GLsizei winWidth =1200, winHeight =800; // Valores de ancho y alto de la pantall
 
 // Strings
 string mainTitle = "Sargento Gorrito";
+string btnStart = "Inicio";
+string btnLoad = "Cargar";
+string btnOptions = "Opciones";
 
 GLubyte itc[] = {
 
@@ -105,20 +108,73 @@ GLubyte up[] = {
 };
 
 void init(void) {
-    glClearColor(.98,.47,.03,1); // Color de la ventada, el fondo naranja
+    glClearColor(1, 1, 1, 1);
+}
+
+// Function in charge of drawing a button with a design pattern
+void paintButton() {
+    glRectf(50, 100, 700, 300);
 }
 
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //--------------- Display the name of the game
     glPushMatrix();
-    glTranslatef(600, 50, 1);
+    glTranslatef(300, 1000, 1); // <- X: 300 Y: 1000
     glScaled(0.6, 0.6, 0.6);
-    glColor3f(1.0, 0.0, 0.0);
-    for (int k=0; k<mainTitle.size(); k++)
+    glColor3f(0.0, 0.0, 0.0); // <- Black color
+    for (int k = 0; k < mainTitle.size(); k++)
         glutStrokeCharacter(GLUT_STROKE_ROMAN, mainTitle[k]);
+    glPopMatrix();
+
+    //--------------- Display three buttons
+    int y = 600; // used for healping to organize the buttons
+    glColor3f(0.0, 1.0, 0.0); // <- Green color
+
+    // Paint button 1
+    glPushMatrix();
+        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
+        glScaled(0.6, 0.6, 0.6);
+        paintButton();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(480, y + 70, 1);
+        glColor3f(0.0, 0.0, 0.0);
+         for (int k = 0; k < btnStart.size(); k++)
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnStart[k]);
+    glPopMatrix();
+
+    // Paint button 2
+    y -= 200; // Updated for second button
+    glColor3f(0.0, 1.0, 0.0); // <- Green color
+
+    glPushMatrix();
+        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
+        glScaled(0.6, 0.6, 0.6);
+        paintButton();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(480, y + 70, 1);
+        glColor3f(0.0, 0.0, 0.0);
+         for (int k = 0; k < btnLoad.size(); k++)
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnLoad[k]);
+    glPopMatrix();
+
+    // Paint button 3
+    y -= 200; // Updated for third button
+    glColor3f(0.0, 1.0, 0.0); // <- Green color
+
+    glPushMatrix();
+        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
+        glScaled(0.6, 0.6, 0.6);
+        paintButton();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(480, y + 70, 1);
+        glColor3f(0.0, 0.0, 0.0);
+         for (int k = 0; k < btnOptions.size(); k++)
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnOptions[k]);
     glPopMatrix();
 
     glutSwapBuffers();
@@ -129,6 +185,9 @@ void reshape (int w, int h) {
     glMatrixMode(GL_PROJECTION); // Tipo de proyecion
     glLoadIdentity ();
     gluOrtho2D(0,1200, 0,1200); // Izquierda, derecha, abajo y arriba
+
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity ();
 }
 
 void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
@@ -149,7 +208,7 @@ int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
     glutInitWindowSize(winWidth, winHeight); // Adjust the width and height of the windows
     glutInitWindowPosition(200,0); // Position of the screen where the window appear
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE ); // Doble buffer for animations
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH ); // Doble buffer for animations
     glutCreateWindow("Sargento Gorrito");
     init();
     glutDisplayFunc(display);
