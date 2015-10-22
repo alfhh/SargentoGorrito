@@ -1,7 +1,7 @@
 /**
- * Sargento Gorrito
- * Main class
- * Developed: Alfredo Hinojosa - Francisco Canseco
+ * Title: Sargento Gorrito
+ * Developed by: Alfredo Hinojosa & Francisco Canseco
+ * File: Main class
  */
 
 #ifdef __APPLE__
@@ -11,81 +11,152 @@
 #include <GL/glut.h>
 #endif
 
+
+#include <sstream>
 #include <stdlib.h>
-#include <iostream>
+#include <math.h>
 #include <string>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <random>
+#include <chrono>
 using namespace std;
 
-//*************** Globales
 
-// Cuartos - Niveles
-int room = 0; // indica el nivel/cuarto en donde se encuentra el player
-
-// Banderas
+// Globals
+GLsizei winWidth =1200, winHeight =800; // Valores de ancho y alto de la pantalla
 
 // Strings
-string mainTitle ="Sargento Gorrito";
+string mainTitle = "Sargento Gorrito";
+
+GLubyte itc[] = {
+
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xFC,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x07,0xC1,0xE0,
+    0x1E,0x3F,0xF9,0xE0,
+    0x1E,0x3F,0xF9,0xFC,
+    0x1E,0x3F,0xF9,0xFC,
+    0x1E,0x3F,0xF9,0xFC,
+    0x1E,0x3F,0xF9,0xFC,
+    0x1E,0x3F,0xF9,0xFC,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
 
 
-void init(void)
-{
-    glClearColor (1, 1, 1, 0.0);
-    glShadeModel (GL_SMOOTH);
+};
+
+GLubyte up[] = {
+
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,
+    0x0F,0xFF,0xF0,0x00,
+    0x08,0x00,0x10,0x00,
+    0x18,0x00,0x18,0x00,
+    0x10,0x00,0x08,0x00,
+    0x10,0x00,0x08,0x00,
+    0x10,0x00,0x08,0x00,
+    0x10,0x66,0x08,0x00,
+    0x30,0x66,0x0C,0x00,
+    0x30,0x66,0x0C,0x00,
+    0x78,0x66,0x1E,0x00,
+    0x7F,0xFF,0xFE,0x00,
+    0x5F,0xFF,0xFA,0x00,
+    0x4F,0xC3,0xF2,0x00,
+    0x5F,0x81,0xFA,0x00,
+    0x7F,0x81,0xFE,0x00,
+    0x7F,0xC3,0xFE,0x00,
+    0x3F,0xFF,0xFC,0x00,
+    0x33,0xFF,0xCC,0x00,
+    0x11,0xFF,0x88,0x00,
+    0x11,0xFF,0x88,0x00,
+    0x19,0xFF,0x98,0x00,
+    0x05,0xFF,0xA0,0x00,
+    0x05,0xFF,0xA0,0x00,
+    0x00,0x01,0x37,0xFF,
+    0x00,0x00,0x00,0x00,
+};
+
+void init(void) {
+    glClearColor(.98,.47,.03,1); // Color de la ventada, el fondo naranja
 }
 
-void display(void)
-{
-    glClear (GL_COLOR_BUFFER_BIT);
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1,1,1);
 
-    // El jugador se encuentra en el menu principal del juego
-    if(room == 0) {
-
-        //--------------- Despliega el titulo principal del juego
-        glTranslatef(0, 2, 0);
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
-        for (int k = 0; k < mainTitle.size(); k++)
-            glutStrokeCharacter(GLUT_STROKE_ROMAN, mainTitle[k]);
-        glPopMatrix();
-
-    }
+    //--------------- Display the name of the game
+    glPushMatrix();
+    glTranslatef(600, 50, 1);
+    glScaled(0.6, 0.6, 0.6);
+    glColor3f(1.0, 0.0, 0.0);
+    for (int k=0; k<mainTitle.size(); k++)
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, mainTitle[k]);
+    glPopMatrix();
 
     glutSwapBuffers();
 }
 
-void reshape (int w, int h)
-{
+void reshape (int w, int h) {
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-    glMatrixMode (GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION); // Tipo de proyecion
     glLoadIdentity ();
-    gluPerspective(65.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0); // dibujo de perspectiva
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);  // Aqui tenemos la camara, estamos viendo todo desde Z = 5
+    gluOrtho2D(0,1200, 0,1200); // Izquierda, derecha, abajo y arriba
 }
 
-void keyboard (unsigned char key, int x, int y)
-{
-    switch (key) {
-        case 27 :
-            exit(-1); //termina el juego
+void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
+    switch (theKey) {
+        case 27:
+            exit(-1); //terminate the program
         default:
-            break;
+            break; // do nothing
     }
 }
 
-int main(int argc, char** argv)
-{
+void myMouse(int button, int state, int x, int y) {
+
+}
+
+
+int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize (1200, 800);
-    glutInitWindowPosition (100, 100);
-    glutCreateWindow ("Sargento Gorrito");
-    init ();
+    glutInitWindowSize(winWidth, winHeight); // Adjust the width and height of the windows
+    glutInitWindowPosition(200,0); // Position of the screen where the window appear
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE ); // Doble buffer for animations
+    glutCreateWindow("Sargento Gorrito");
+    init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glutKeyboardFunc(keyboard);
+    glutKeyboardFunc(myKeyboard);
+    glutMouseFunc(myMouse);
     glutMainLoop();
-    return 0;
+    return EXIT_SUCCESS;
+
 }
