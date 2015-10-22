@@ -12,60 +12,44 @@
 #endif
 
 #include <stdlib.h>
+#include <iostream>
+#include <string>
+using namespace std;
 
-static int shoulder = 0, elbow = 0, hand = 0, finger = 0;
+//*************** Globales
+
+// Cuartos - Niveles
+int room = 0; // indica el nivel/cuarto en donde se encuentra el player
+
+// Banderas
+
+// Strings
+string mainTitle ="Sargento Gorrito";
+
 
 void init(void)
 {
     glClearColor (1, 1, 1, 0.0);
-    glShadeModel (GL_FLAT);
+    glShadeModel (GL_SMOOTH);
 }
 
 void display(void)
 {
     glClear (GL_COLOR_BUFFER_BIT);
-    glLineWidth(3); //***
-    glPushMatrix();
-    glTranslatef (-1.0, 0.0, 0.0);
-    glRotatef ((GLfloat) shoulder, 0.0, 0.0, 1.0);
-    glTranslatef (1.0, 0.0, 0.0);
 
-    glPushMatrix();
-    glScalef (2.0, 0.4, 1.0);
-    glColor3f(1, 0, 0);//***
-    glutSolidCube(1.0);//***
-    glColor3f(0, 0, 0);//***
-    glutWireCube (1.0); // <- shoulder
-    glPopMatrix();
+    // El jugador se encuentra en el menu principal del juego
+    if(room == 0) {
 
-    glTranslatef (1.0, 0.0, 0.0);
-    glRotatef ((GLfloat) elbow, 0.0, 0.0, 1.0);
-    glTranslatef (1.0, 0.0, 0.0);
-    glPushMatrix();
-    glScalef (2.0, 0.4, 1.0);
-    glColor3f(0, 0, 1); //***
-    glutWireCube (1.0); // <- elbow
-    glPopMatrix();
+        //--------------- Despliega el titulo principal del juego
+        glTranslatef(0, 2, 0);
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        for (int k = 0; k < mainTitle.size(); k++)
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, mainTitle[k]);
+        glPopMatrix();
 
-    glTranslatef(1.0, 0.0, 0.0);
-    glRotatef ((GLfloat) hand, 0.0, 0.0, 1.0);
-    glTranslatef(0.5, 0.0, 0.0);
-    glPushMatrix();
-    glScalef(1.0, 0.4, 1.0);
-    glColor3f(0, 1, 0);
-    glutWireCube(1.0); // <- hand
-    glPopMatrix();
+    }
 
-    glTranslatef(.5, 0.0, 0.0);
-    glRotatef ((GLfloat) finger, 0.0, 0.0, 1.0);
-    glTranslatef(0.25, 0.0, 0.0);
-    glPushMatrix();
-    glScalef(0.5, 0.4, 1.0);
-    glColor3f(0, 1, .5);
-    glutWireCube(1.0); // <- finger
-    glPopMatrix();
-
-    glPopMatrix();
     glutSwapBuffers();
 }
 
@@ -75,46 +59,17 @@ void reshape (int w, int h)
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     gluPerspective(65.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0); // dibujo de perspectiva
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0); // tenemos camara
+    gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);  // Aqui tenemos la camara, estamos viendo todo desde Z = 5
 }
 
 void keyboard (unsigned char key, int x, int y)
 {
     switch (key) {
-        case 's':   /*  s key rotates at shoulder  */
-            shoulder = (shoulder + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'S':
-            shoulder = (shoulder - 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'e':  /*  e key rotates at elbow  */
-            elbow = (elbow + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'E':
-            elbow = (elbow - 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'h':  /*  e key rotates at hand  */
-            hand = (hand + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'H':
-            hand = (hand - 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'f':  /*  e key rotates at hand  */
-            finger = (finger + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'F':
-            finger = (finger - 5) % 360;
-            glutPostRedisplay();
-            break;
+        case 27 :
+            exit(-1); //termina el juego
         default:
             break;
     }
@@ -124,7 +79,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize (500, 500);
+    glutInitWindowSize (1200, 800);
     glutInitWindowPosition (100, 100);
     glutCreateWindow ("Sargento Gorrito");
     init ();
