@@ -140,6 +140,7 @@ void display() {
     glPopMatrix();
     glPushMatrix();
         glTranslatef(480, y + 70, 1);
+        glScaled(0.5, 0.5, 0.5);
         glColor3f(0.0, 0.0, 0.0);
          for (int k = 0; k < btnStart.size(); k++)
             glutStrokeCharacter(GLUT_STROKE_ROMAN, btnStart[k]);
@@ -156,6 +157,7 @@ void display() {
     glPopMatrix();
     glPushMatrix();
         glTranslatef(480, y + 70, 1);
+        glScaled(0.5, 0.5, 0.5);
         glColor3f(0.0, 0.0, 0.0);
          for (int k = 0; k < btnLoad.size(); k++)
             glutStrokeCharacter(GLUT_STROKE_ROMAN, btnLoad[k]);
@@ -172,6 +174,7 @@ void display() {
     glPopMatrix();
     glPushMatrix();
         glTranslatef(480, y + 70, 1);
+        glScaled(0.5, 0.5, 0.5);
         glColor3f(0.0, 0.0, 0.0);
          for (int k = 0; k < btnOptions.size(); k++)
             glutStrokeCharacter(GLUT_STROKE_ROMAN, btnOptions[k]);
