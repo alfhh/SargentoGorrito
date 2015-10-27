@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1445498887 source:c:\users\ferra_000\onedrive\itesm\7 semestre\gráficas computacionales\sargentogorrito\main.cpp
+1445495824 source:c:\users\ferra_000\onedrive\itesm\7 semestre\gráficas computacionales\sargentogorrito\main.cpp
 	<GLUT/glut.h>
 	<windows.h>
 	<GL/glut.h>
@@ -13,7 +13,7 @@
 	<random>
 	<chrono>
 
-1439416362 c:\program files (x86)\glut\include\gl\glut.h
+1439412762 c:\program files (x86)\glut\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>

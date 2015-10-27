@@ -25,7 +25,7 @@ using namespace std;
 
 
 // Globals
-GLsizei winWidth =1200, winHeight =800; // Valores de ancho y alto de la pantalla
+GLsizei winWidth =1200, winHeight =800; // Width and height values of the screen
 
 // Strings
 string mainTitle = "Sargento Gorrito";
@@ -185,9 +185,9 @@ void display() {
 
 void reshape (int w, int h) {
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-    glMatrixMode(GL_PROJECTION); // Tipo de proyecion
+    glMatrixMode(GL_PROJECTION); // Projection type
     glLoadIdentity ();
-    gluOrtho2D(0,1200, 0,1200); // Izquierda, derecha, abajo y arriba
+    gluOrtho2D(0,1200, 0,1200); // Left and right, down and top
 
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity ();
