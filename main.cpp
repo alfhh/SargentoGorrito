@@ -144,16 +144,37 @@ GLubyte sargento[] =  {
 };
 
 void init(void) {
-    glClearColor(1, 1, 1, 1);
+    glClearColor(0.61, 0.36, 0.28, 1); // skin color
 }
 
 
 // Function in charge of drawing a button with a design pattern
-void paintButton() {
-    glEnable(GL_POLYGON_STIPPLE);
-    glPolygonStipple (up);
-    glRectf(50, 100, 700, 300);
-    glDisable(GL_POLYGON_STIPPLE);
+void paintButton(int message, int xcor, int ycor) {
+    string temp;
+    switch(message){
+        case 0:
+            temp = btnStart;
+            break;
+        case 1:
+            temp = btnOptions;
+            break;
+        case 2:
+            temp = btnLoad;
+
+    }
+    glPushMatrix();
+        glTranslatef(xcor, ycor, 1);
+        glScaled(0.6, 0.6, 0.6);
+        glRectf(50, 100, 700, 300);
+    glPopMatrix(); // Close previous PushMatrix
+    glPushMatrix();
+        glTranslatef(480, ycor + 90, 1);
+        glScaled(0.5, 0.5, 0.5);
+        glColor3f(1.0, 1.0, 1.0);
+         for (int k = 0; k < temp.size(); k++)
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, temp[k]); // Print label
+    glPopMatrix();
+
 }
 
 void display() {
@@ -161,64 +182,26 @@ void display() {
 
     //--------------- Display the name of the game
     glPushMatrix();
-    glTranslatef(300, 1000, 1); // <- X: 300 Y: 1000
+    glTranslatef(winWidth / 4, (winHeight / 4) * 3.5, 1);
     glScaled(0.6, 0.6, 0.6);
-    glColor3f(0.0, 0.0, 0.0); // <- Black color
+    glColor3f(1.0, 1.0, 1.0); // <- Black color
     for (int k = 0; k < mainTitle.size(); k++)
         glutStrokeCharacter(GLUT_STROKE_ROMAN, mainTitle[k]);
     glPopMatrix();
 
     //--------------- Display three buttons
-    int y = 600; // used for healping to organize the buttons
-    glColor3f(0.0, 1.0, 0.0); // <- Green color
+    int y = winHeight; // used for healping to organize the buttons
+    int x = (winWidth / 3.1); // also used for organizing buttons
 
-    // Paint button 1
-    glPushMatrix();
-        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
-        glScaled(0.6, 0.6, 0.6);
-        paintButton();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslatef(480, y + 70, 1);
-        glScaled(0.5, 0.5, 0.5);
-        glColor3f(0.0, 0.0, 0.0);
-         for (int k = 0; k < btnStart.size(); k++)
-            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnStart[k]);
-    glPopMatrix();
+    glColor3f(0.15, 0.15, 0.13); // <- Gray color
+    paintButton(0, x, y / 2); // Paint button 1
 
-    // Paint button 2
-    y -= 200; // Updated for second button
-    glColor3f(0.0, 1.0, 0.0); // <- Green color
+    glColor3f(0.15, 0.15, 0.13); // <- Gray color
+    paintButton(1, x, y / 3.5); // Paint button 2
 
-    glPushMatrix();
-        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
-        glScaled(0.6, 0.6, 0.6);
-        paintButton();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslatef(480, y + 70, 1);
-        glScaled(0.5, 0.5, 0.5);
-        glColor3f(0.0, 0.0, 0.0);
-         for (int k = 0; k < btnLoad.size(); k++)
-            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnLoad[k]);
-    glPopMatrix();
+    glColor3f(0.15, 0.15, 0.13); // <- Gray color
+    paintButton(2, x, y / 12); // Paint button 3
 
-    // Paint button 3
-    y -= 200; // Updated for third button
-    glColor3f(0.0, 1.0, 0.0); // <- Green color
-
-    glPushMatrix();
-        glTranslatef(400, y, 1); // <- X: 300 Y: 1000
-        glScaled(0.6, 0.6, 0.6);
-        paintButton();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslatef(480, y + 70, 1);
-        glScaled(0.5, 0.5, 0.5);
-        glColor3f(0.0, 0.0, 0.0);
-         for (int k = 0; k < btnOptions.size(); k++)
-            glutStrokeCharacter(GLUT_STROKE_ROMAN, btnOptions[k]);
-    glPopMatrix();
 
     glutSwapBuffers();
 }
@@ -227,10 +210,9 @@ void reshape (int w, int h) {
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
     glMatrixMode(GL_PROJECTION); // Projection type
     glLoadIdentity ();
-    gluOrtho2D(0,1200, 0,1200); // Left and right, down and top
-
+    glOrtho (0, 1200, 0, 800, -1.0, 1.0); // Left and right, down and top
     glMatrixMode (GL_MODELVIEW);
-    glLoadIdentity ();
+    //TODO ADD A GLULOOKAT
 }
 
 void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
@@ -243,7 +225,18 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
 }
 
 void myMouse(int button, int state, int x, int y) {
+    int realX = glutGet(GLUT_WINDOW_WIDTH);
+    int realY = glutGet(GLUT_WINDOW_HEIGHT);
 
+    if(state == GLUT_DOWN){
+        cout << "X: " << x << " Y: " << y << endl;
+        if(x > (realX / 3) && x < (realX / 3) * 2){
+            cout << "Buttons..." << endl;
+            if(y > (realY / 4) &&  y < (realY/4) + (realY/8) ){
+                cout << "B1" << endl;
+            }
+        }
+    }
 }
 
 
@@ -254,8 +247,8 @@ int main(int argc, char *argv[]) {
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH ); // Doble buffer for animations
     glutCreateWindow("Sargento Gorrito");
     init();
-    glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboard);
     glutMouseFunc(myMouse);
     glutMainLoop();
