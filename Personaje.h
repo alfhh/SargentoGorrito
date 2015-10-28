@@ -39,6 +39,7 @@ private:
     int tamanoY;
     
 public:
+    Personaje (int x, int y,int vida);
     int getPosX();
     int getPosY();
     int getTamanoX();
@@ -49,6 +50,6 @@ public:
     void alteraVida(int v);
     virtual void dibuja()=0;
     virtual void actualizaTamano(int height , int width)=0;
-    bool checaColision(Personaje p);
+    bool checaColision(Personaje *p);
 };
 #endif /* defined(__SargentoGorrito__Personaje__) */

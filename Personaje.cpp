@@ -13,6 +13,12 @@ int Personaje::getPosX(){
 int Personaje::getPosY(){
     return posY;
 }
+int Personaje::getTamanoX(){
+    return tamanoX;
+}
+int Personaje::getTamanoY(){
+    return tamanoY;
+}
 void Personaje::setPosX(int x){
     posX=x;
 }
@@ -25,11 +31,16 @@ void Personaje::setVida(int v){
 void Personaje::alteraVida(int v){
     vida+=v;
 }
-bool Personaje::checaColision(Personaje p){
-    if (p.getPosX()+p.getTamanoX()>posX||posX+tamanoX>p.getPosX()){
-        if (p.getPosY()+p.getTamanoY()>posY||posY+tamanoY>p.getPosY()){
+bool Personaje::checaColision(Personaje *p){
+    if (p->getPosX()+p->getTamanoX()>posX||posX+tamanoX>p->getPosX()){
+        if (p->getPosY()+p->getTamanoY()>posY||posY+tamanoY>p->getPosY()){
             return true;
         }
     }
     return false;
+}
+Personaje::Personaje(int x, int y,int v){
+    posX=x;
+    posY=y;
+    vida=v;
 }
