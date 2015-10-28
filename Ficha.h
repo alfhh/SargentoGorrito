@@ -6,8 +6,26 @@
 //  Copyright (c) 2015 Francisco Canseco. All rights reserved.
 //
 
-#ifndef SargentoGorrito_Ficha_h
-#define SargentoGorrito_Ficha_h
+#ifndef __SargentoGorrito__Ficha__
+#define __SargentoGorrito__Ficha__
 
+#include <stdio.h>
+#include <string>
+#inclue <GLFWimage>
+using namespace std;
 
-#endif
+class Ficha {
+private:
+    string nombre;
+    GLFWimage imagen;
+    string descipcion;
+    bool
+public:
+    Ficha();
+    string getNombre();
+    GLFWimage getImagen();
+    string getDescripcion();
+    void setNombre;
+};
+
+#endif /* defined(__SargentoGorrito__Ficha__) */
