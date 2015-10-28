@@ -147,9 +147,13 @@ void init(void) {
     glClearColor(1, 1, 1, 1);
 }
 
+
 // Function in charge of drawing a button with a design pattern
 void paintButton() {
+    glEnable(GL_POLYGON_STIPPLE);
+    glPolygonStipple (up);
     glRectf(50, 100, 700, 300);
+    glDisable(GL_POLYGON_STIPPLE);
 }
 
 void display() {
